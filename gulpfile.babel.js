@@ -5,8 +5,6 @@ import gulpBabel from 'gulp-babel';
 import gulpChanged from 'gulp-changed';
 import gulpEslint from 'gulp-eslint';
 import gulpSequence from 'gulp-sequence';
-import gulpSourcemaps from 'gulp-sourcemaps';
-import gulpSourcemapsSupport from 'gulp-sourcemaps-support';
 import gulpUtil from 'gulp-util';
 import rimraf from 'rimraf';
 import through from 'through';
@@ -51,13 +49,10 @@ const remove = (glob) => {
 gulp.task('babelAll', () => {
   remove('dist').then(() => {
     return gulp.src(pathApp)
-      .pipe(gulpSourcemapsSupport())
-      .pipe(gulpSourcemaps.init())
       .pipe(gulpBabel())
       .on('error', (err) => {
         gulpUtil.log(gulpUtil.colors.red(err));
       })
-      .pipe(gulpSourcemaps.write('.'))
       .pipe(gulp.dest('dist'))
       .pipe(count('Babel'));
   });
@@ -66,13 +61,10 @@ gulp.task('babelAll', () => {
 gulp.task('babel', () => {
   return gulp.src(pathApp)
     .pipe(gulpChanged('dist'))
-    .pipe(gulpSourcemapsSupport())
-    .pipe(gulpSourcemaps.init())
     .pipe(gulpBabel())
     .on('error', (err) => {
       gulpUtil.log(gulpUtil.colors.red(err));
     })
-    .pipe(gulpSourcemaps.write('.'))
     .pipe(gulp.dest('dist'))
     .pipe(count('Babel'));
 });
