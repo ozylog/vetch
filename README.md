@@ -8,30 +8,38 @@ npm install @ozylog/fetch
 ```
 
 ## Usage Example
+
+### fetch()
 ```javascript
 // normal fetch
-const response = await fetch('/users.html');
-const body = response.text();
+const response1 = await fetch('/users.html');
+const body1 = await response.text();
 
-const response = await fetch('/users.json');
-const body = response.json();
+const response2 = await fetch('/users.json');
+const body2 = await response.json();
 ```
 
+### fetchJson()
 ```javascript
 type Response = {
-  status: Number,
+  status: number,
   body: Object
 };
-const response: Response = fetchJson('/user.json');
-const response: Response = fetchJson({
+const response1: Response = await fetchJson('/user.json');
+const response2: Response = await fetchJson({
   url: '/user.json',
   method: 'POST',
   body: JSON.stringify({hello: 'world'})
 });
 ```
 
+### fetchGraphql()
 ```javascript
-const response: Response = fetchGraphql({
+type Response = {
+  status: number,
+  body: Object
+};
+const response1: Response = await fetchGraphql({
   url: '/graphql',
   query: `{
     user {
