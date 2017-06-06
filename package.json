@@ -1,31 +1,31 @@
 {
-  "name": "ozylog-fetch",
+  "name": "@ozylog/fetch",
   "version": "1.0.2",
   "description": "Simple fetch handler",
   "main": "./dist/index.js",
   "scripts": {
-    "prepublish": "ozylog-node-boilerplate build",
-    "build": "ozylog-node-boilerplate build",
-    "watch": "ozylog-node-boilerplate watch"
+    "prepublish": "boilerplate --build=node",
+    "build": "boilerplate --build=node",
+    "watch": "boilerplate --watch=node"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ozylog/ozylog-fetch.git"
+    "url": "git+https://github.com/ozylog/fetch.git"
   },
   "keywords": [
     "ozylog",
     "fetch"
   ],
-  "author": "Cahya Pribadi <ozylog@gmail.com>",
-  "license": "MIT",
+  "author": "Cahya Pribadi <cahya@monelog.com>",
+  "license": "SEE LICENSE IN LICENSE",
   "bugs": {
-    "url": "https://github.com/ozylog/ozylog-fetch/issues"
+    "url": "https://github.com/ozylog/fetch/issues"
   },
-  "homepage": "https://github.com/ozylog/ozylog-fetch#readme",
+  "homepage": "https://github.com/ozylog/fetch#readme",
   "devDependencies": {
-    "@ozylog/ozylog-node-boilerplate": "^0.2.6"
+    "@ozylog/boilerplate": "^0.4.9"
   },
   "dependencies": {
-    "node-fetch": "^1.6.3"
+    "isomorphic-fetch": "^2.2.1"
   }
 }

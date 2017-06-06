@@ -15,8 +15,18 @@ Icon
 .nodemonignore
 npm-debug.log
 node_modules/
+coverage/
+.nyc_output/
 src/
 .babelrc
 .eslintrc
 gulpfile.js
 gulpfile.babel.js
+.travis.yml
+.flowconfig
+.webpack.config.js
+
+# --------------------
+# Other Files
+# --------------------
+.vscode/

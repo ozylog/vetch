@@ -1,46 +1,45 @@
 'use strict';
 
-import nodeFetch from 'node-fetch';
+import 'isomorphic-fetch';
 
-export async function fetch(req) {
+function queryStringify(queryObject) {
+  let query = '';
+
+  for (let key in queryObject) {
+    const value = queryObject[key];
+    key = encodeURI(key);
+
+    if (value instanceof Array) {
+      for (const v of value) {
+        query += `&${key}[]=${encodeURI(v)}`;
+      }
+    } else {
+      query += `&${key}=${encodeURI(value)}`;
+    }
+  }
+
+  if (query) query = query.substr(1);
+
+  return query;
+}
+
+async function request(param) {
   try {
     let body;
-    let url = req.url || req.uri;
-    const method = req.method || 'GET';
-    const headers = req.headers || {};
+    let url = param.url || param.uri;
+    const method = param.method || 'GET';
+    const headers = param.headers || {};
 
-    if (req.jsonData) {
+    if (param.body) body = param.body;
+    if (param.json) {
       headers['Content-Type'] = 'application/json';
       headers.Accept = 'application/json';
-      body = JSON.stringify(req.jsonData);
+    }
+    if (param.query) {
+      url += queryStringify(param.query);
     }
 
-    if (req.urlData) {
-      let query = '';
-
-      for (let key in req.urlData) {
-        if (req.urlData[key]) {
-          const value = req.urlData[key];
-          key = encodeURI(key);
-
-          if (value instanceof Array) {
-            value.forEach((v) => {
-              query += `&${key}[]=${encodeURI(v)}`;
-            });
-          } else {
-            query += `&${key}=${encodeURI(value)}`;
-          }
-        }
-      }
-      if (query) {
-        query = query.substr(1);
-        url += `?${query}`;
-      }
-    }
-
-    if (!headers.Accept) headers.Accept = 'application/json';
-
-    const res = await nodeFetch(url, {method, headers, body});
+    const res = await fetch(url, {method, headers, body});
 
     return res;
   } catch (err) {
@@ -48,16 +47,15 @@ export async function fetch(req) {
   }
 }
 
-export async function fetchJson(req) {
+export async function fetchJson(param) {
   try {
-    const res = await fetch(req);
-    const json = await res.json();
-
-    if (res.status !== 200) throw new Error(json);
-
+    const paramReq = {json: true};
+    Object.assign(paramReq, param.constructor === String ? {url: param} : param);
+    const res = await request(paramReq);
+    const jsonBody = await res.json();
     const result = {
       status: res.status,
-      body: json
+      body: jsonBody
     };
 
     return result;
@@ -65,3 +63,30 @@ export async function fetchJson(req) {
     return err;
   }
 }
+
+export async function fetchGraphql(param) {
+  try {
+    const {uri, url, query, variables, ...others} = param;
+    const paramReq = Object.assign({
+      url: url || uri,
+      method: 'POST',
+      body: JSON.stringify({
+        query,
+        variables
+      }),
+      json: true
+    }, others);
+    const res = await request(paramReq);
+    const jsonBody = await res.json();
+    const result = {
+      status: res.status,
+      body: jsonBody
+    };
+
+    return result;
+  } catch (err) {
+    return err;
+  }
+}
+
+export default fetch;
