@@ -11,7 +11,8 @@ npm install @ozylog/fetch
 
 ### fetch()
 ```javascript
-// normal fetch
+import {fetch} from @ozylog/fetch;
+
 const response1 = await fetch('/users.html');
 const body1 = await response.text();
 
@@ -21,12 +22,17 @@ const body2 = await response.json();
 
 ### fetchJson()
 ```javascript
-type Response = {
+// @flow
+
+import {fetchJson} from @ozylog/fetch;
+
+type ResponseType = {
   status: number,
   body: Object
 };
-const response1: Response = await fetchJson('/user.json');
-const response2: Response = await fetchJson({
+
+const response1: ResponseType = await fetchJson('/user.json');
+const response2: ResponseType = await fetchJson({
   url: '/user.json',
   method: 'POST',
   body: JSON.stringify({hello: 'world'})
@@ -35,11 +41,16 @@ const response2: Response = await fetchJson({
 
 ### fetchGraphql()
 ```javascript
-type Response = {
+// @flow
+
+import {fetchGraphql} from @ozylog/fetch;
+
+type ResponseType = {
   status: number,
   body: Object
 };
-const response1: Response = await fetchGraphql({
+
+const response1: ResponseType = await fetchGraphql({
   url: '/graphql',
   query: `{
     user {
