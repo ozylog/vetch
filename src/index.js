@@ -25,12 +25,10 @@ function queryStringify(queryObject) {
 
 async function request(param) {
   try {
-    let body;
     let url = param.url || param.uri;
     const method = param.method || 'GET';
     const headers = param.headers || {};
 
-    if (param.body) body = param.body;
     if (param.json) {
       headers['Content-Type'] = 'application/json';
       headers.Accept = 'application/json';
@@ -39,7 +37,13 @@ async function request(param) {
       url += queryStringify(param.query);
     }
 
-    const res = await fetch(url, {method, headers, body});
+    const opts = {method};
+
+    if (Object.keys(headers).length) Object.assign(opts, {headers});
+    if (param.body) Object.assign(opts, {body: param.body});
+    if (param.credentials) Object.assign(opts, {credentials: param.credentials});
+
+    const res = await fetch(url, opts);
 
     return res;
   } catch (err) {
