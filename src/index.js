@@ -24,73 +24,89 @@ function queryStringify(queryObject) {
 }
 
 async function request(param) {
-  try {
-    let url = param.url || param.uri;
-    const method = param.method || 'GET';
-    const headers = param.headers || {};
+  let url = param.url || param.uri;
+  const method = param.method || 'GET';
+  const headers = param.headers || {};
 
-    if (param.json) {
-      headers['Content-Type'] = 'application/json';
-      headers.Accept = 'application/json';
-    }
-    if (param.query) {
-      url += queryStringify(param.query);
-    }
-
-    const opts = {method};
-
-    if (Object.keys(headers).length) Object.assign(opts, {headers});
-    if (param.body) Object.assign(opts, {body: param.body});
-    if (param.credentials) Object.assign(opts, {credentials: param.credentials});
-
-    const res = await fetch(url, opts);
-
-    return res;
-  } catch (err) {
-    throw err;
+  if (param.json) {
+    headers['Content-Type'] = 'application/json';
+    headers.Accept = 'application/json';
   }
+  if (param.query) {
+    url += queryStringify(param.query);
+  }
+
+  const opts = {method};
+
+  if (Object.keys(headers).length) Object.assign(opts, {headers});
+  if (param.body) Object.assign(opts, {body: param.body});
+  if (param.credentials) Object.assign(opts, {credentials: param.credentials});
+
+  const res = await fetch(url, opts);
+
+  return res;
 }
 
 export async function fetchJson(param) {
-  try {
-    const paramReq = {json: true};
-    Object.assign(paramReq, param.constructor === String ? {url: param} : param);
-    const res = await request(paramReq);
-    const jsonBody = await res.json();
-    const result = {
-      status: res.status,
-      body: jsonBody
-    };
+  const paramReq = {json: true};
+  Object.assign(paramReq, param.constructor === String ? {url: param} : param);
+  const res = await request(paramReq);
+  const jsonBody = await res.json();
+  const result = {
+    status: res.status,
+    body: jsonBody,
+    headers: res.headers,
+    url: res.url
+  };
 
-    return result;
-  } catch (err) {
-    return err;
+  if (!res.ok) {
+    const error = new Error(res.statusText);
+
+    Object.assign(error, result);
+    throw error;
   }
+
+  return result;
 }
 
 export async function fetchGraphql(param) {
-  try {
-    const {uri, url, query, variables, ...others} = param;
-    const paramReq = Object.assign({
-      url: url || uri,
-      method: 'POST',
-      body: JSON.stringify({
-        query,
-        variables
-      }),
-      json: true
-    }, others);
-    const res = await request(paramReq);
-    const jsonBody = await res.json();
-    const result = {
-      status: res.status,
-      body: jsonBody
-    };
+  const {uri, url, query, variables, ...others} = param;
+  const paramReq = Object.assign({
+    url: url || uri,
+    method: 'POST',
+    body: JSON.stringify({
+      query,
+      variables
+    }),
+    json: true
+  }, others);
 
-    return result;
-  } catch (err) {
-    return err;
+  const res = await request(paramReq);
+  const jsonBody = await res.json();
+  const result = {
+    status: res.status,
+    headers: res.headers,
+    url: res.url
+  };
+
+  if (!res.ok || jsonBody.errors) {
+    const error = new Error(!res.ok ? res.statusText : 'GraphQL Error');
+
+    Object.assign(error, result, {errors: jsonBody.errors || []});
+    throw error;
   }
+
+  let body = null;
+
+  if (jsonBody.data) {
+    const key = Object.keys(jsonBody.data)[0];
+
+    body = jsonBody.data[key];
+  }
+
+  Object.assign(result, {body});
+
+  return result;
 }
 
 export default fetch;
