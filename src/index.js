@@ -92,19 +92,11 @@ export async function fetchGraphql(param) {
   if (!res.ok || jsonBody.errors) {
     const error = new Error(!res.ok ? res.statusText : 'GraphQL Error');
 
-    Object.assign(error, result, {body: jsonBody.errors || []});
+    Object.assign(error, result, {body: {errors: jsonBody.errors} || []});
     throw error;
   }
 
-  let body = null;
-
-  if (jsonBody.data) {
-    const key = Object.keys(jsonBody.data)[0];
-
-    body = jsonBody.data[key];
-  }
-
-  Object.assign(result, {body});
+  Object.assign(result, {body: jsonBody.data || null});
 
   return result;
 }
