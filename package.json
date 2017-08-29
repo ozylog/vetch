@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/ozylog/fetch#readme",
   "devDependencies": {
-    "@ozylog/boilerplate": "^0.6.9"
+    "@ozylog/boilerplate": "^0.7.1"
   },
   "dependencies": {
     "isomorphic-fetch": "^2.2.1"
