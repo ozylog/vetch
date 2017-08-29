@@ -37,6 +37,14 @@ const response2: ResponseType = await fetchJson({
   method: 'POST',
   body: JSON.stringify({hello: 'world'})
 });
+const response3: ResponseType = await fetchJson({
+  url: '/user.json',
+  method: 'GET',
+  query: {
+    ids: [1, 2],
+    country: 'AU'
+  }
+}); // /user.json?ids[]=1&ids[]=2&country=AU
 ```
 
 ### fetchGraphql()

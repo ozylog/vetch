@@ -10,15 +10,15 @@ function queryStringify(queryObject) {
     key = encodeURI(key);
 
     if (value instanceof Array) {
-      for (const v of value) {
-        query += `&${key}[]=${encodeURI(v)}`;
+      for (const item of value) {
+        query += `&${key}[]=${encodeURI(item)}`;
       }
     } else {
       query += `&${key}=${encodeURI(value)}`;
     }
   }
 
-  if (query) query = query.substr(1);
+  if (query) query = `?${query.substr(1)}`;
 
   return query;
 }
@@ -92,11 +92,11 @@ export async function fetchGraphql(param) {
   if (!res.ok || jsonBody.errors) {
     const error = new Error(!res.ok ? res.statusText : 'GraphQL Error');
 
-    Object.assign(error, result, {body: {errors: jsonBody.errors} || []});
+    Object.assign(error, result, {body: {errors: jsonBody.errors || []}});
     throw error;
   }
 
-  Object.assign(result, {body: jsonBody.data || null});
+  Object.assign(result, {body: jsonBody.data || {}});
 
   return result;
 }
