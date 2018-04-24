@@ -1,5 +1,3 @@
-'use strict';
-
 import 'isomorphic-fetch';
 
 function queryStringify(queryObject) {

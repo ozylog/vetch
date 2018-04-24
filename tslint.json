@@ -1,0 +1,10 @@
+{
+  "extends": "tslint:recommended",
+  "rules": {
+    "curly": [true, "ignore-same-line"],
+    "no-empty-interface": [false],
+    "quotemark": [true, "single"],
+    "trailing-comma": [false],
+    "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"]
+  }
+}

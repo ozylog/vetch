@@ -12,10 +12,13 @@ Icon
 # --------------------
 # Node Files
 # --------------------
-.nodemonignore
-npm-debug.log
 node_modules/
 coverage/
 .nyc_output/
 dist/
-.flowconfig
+*.log
+
+# --------------------
+# Other Files
+# --------------------
+.vscode/
