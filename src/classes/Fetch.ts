@@ -1,16 +1,17 @@
-import { IObject, IRequestInit, IResponse, request } from './../helpers';
+import { IRequestInit } from './../helpers';
 import Base from './Base';
 
 export default class Fetch extends Base {
-  private _options: IFetchOptions | null;
+  // TODO: find a way to make this private _options
+  protected _options: IRequestInit | null;
 
   constructor() {
     super();
     this._options = null;
   }
 
-  public fetch(options: IFetchOptions | string) {
-    this._options = typeof options === 'string' ? { url: options } : options ;
+  public call(options: IFetchOptions | string) {
+    this._options = typeof options === 'string' ? { url: options } : options;
 
     return this;
   }

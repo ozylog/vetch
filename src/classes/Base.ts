@@ -1,19 +1,14 @@
-import { IObject, IRequestInit, IResponse, request } from './../helpers';
+import { IResponse, request } from './../helpers';
 
-export default class Base {
-  private _options: any;
+export default abstract class Base {
+  protected abstract _options: any;
   protected _parser: EParser;
 
   constructor() {
-    this._options = null;
     this._parser = EParser.json;
   }
 
-  public fetch(options: any) {
-    this._options = options ;
-
-    return this;
-  }
+  public abstract call(options: any): this;
 
   public arrayBuffer() {
     this._parser = EParser.arrayBuffer;
