@@ -2,9 +2,13 @@
   "extends": "tslint:recommended",
   "rules": {
     "curly": [true, "ignore-same-line"],
-    "no-empty-interface": [false],
+    "no-console": {
+      "severity": "warning"
+    },
+    "no-empty-interface": false,
+    "object-literal-sort-keys": false,
     "quotemark": [true, "single"],
-    "trailing-comma": [false],
+    "trailing-comma": false,
     "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"]
   }
 }

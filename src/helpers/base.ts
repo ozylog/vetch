@@ -1,39 +1,42 @@
 import { IRequestInit, IResponse, request } from './../helpers';
 
-export default function base(this: IBaseFetch) {
-  this._parser = EParser.json;
+export enum EParser {
+  arrayBuffer = 'arrayBuffer',
+  blob = 'blob',
+  formData = 'formData',
+  json = 'json',
+  text = 'text'
+}
 
-  this.arrayBuffer = function() {
+const base: IBase = {
+  _options: null,
+  _parser: EParser.json,
+  arrayBuffer() {
     this._parser = EParser.arrayBuffer;
 
     return this;
-  };
-
-  this.blob = function() {
+  },
+  blob() {
     this._parser = EParser.blob;
 
     return this;
-  };
-
-  this.formData = function() {
+  },
+  formData() {
     this._parser = EParser.formData;
 
     return this;
-  };
-
-  this.json = function() {
+  },
+  json() {
     this._parser = EParser.json;
 
     return this;
-  };
-
-  this.text = function() {
+  },
+  text() {
     this._parser = EParser.text;
 
     return this;
-  };
-
-  this.exec = async function() {
+  },
+  async exec() {
     if (!this._options || !this._options.url) throw new Error('URL is required');
 
     const res = await request(this._options);
@@ -61,15 +64,16 @@ export default function base(this: IBaseFetch) {
       ...res,
       payload
     };
-  };
-
-  this.then = function(resolve, reject) {
+  },
+  then(resolve, reject) {
     return this.exec().then(resolve, reject);
-  };
-}
+  }
+};
 
-interface IBaseFetch {
-  _options: IRequestInit;
+export default base;
+
+interface IBase {
+  _options: IRequestInit | null;
   _parser: EParser;
   arrayBuffer: () => this;
   blob: () => this;
@@ -78,12 +82,4 @@ interface IBaseFetch {
   text: () => this;
   exec: () => Promise<IResponse>;
   then: (resolve: any, reject: any) => Promise<IResponse>;
-}
-
-enum EParser {
-  arrayBuffer = 'arrayBuffer',
-  blob = 'blob',
-  formData = 'formData',
-  json = 'json',
-  text = 'text'
 }
