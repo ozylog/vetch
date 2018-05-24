@@ -1,16 +1,15 @@
-import { IRequestInit, IResponse, request } from './../helpers';
+import { IRequestInit, IResponse, request } from './helpers';
 
-export enum EParser {
-  arrayBuffer = 'arrayBuffer',
-  blob = 'blob',
-  formData = 'formData',
-  json = 'json',
-  text = 'text'
+function vetch(this: IFetch, options: IFetchOptions | string) {
+  if (!options || (typeof options === 'object' && !options.url)) throw new Error('URL is required');
+
+  this._options = typeof options === 'string' ? { url: options } : options;
+  this._parser = EParser.json;
+
+  return this;
 }
 
-const base: IBase = {
-  _options: null,
-  _parser: EParser.json,
+export default vetch.bind({
   arrayBuffer() {
     this._parser = EParser.arrayBuffer;
 
@@ -65,21 +64,22 @@ const base: IBase = {
       payload
     };
   },
-  then(resolve, reject) {
+  then(resolve: Promise<IResponse>, reject: any) {
     return this.exec().then(resolve, reject);
   }
-};
+});
 
-export default base;
-
-interface IBase {
-  _options: IRequestInit | null;
-  _parser: EParser;
-  arrayBuffer: () => this;
-  blob: () => this;
-  formData: () => this;
-  json: () => this;
-  text: () => this;
-  exec: () => Promise<IResponse>;
-  then: (resolve: any, reject: any) => Promise<IResponse>;
+enum EParser {
+  arrayBuffer = 'arrayBuffer',
+  blob = 'blob',
+  formData = 'formData',
+  json = 'json',
+  text = 'text'
 }
+
+interface IFetch {
+  _options: IRequestInit;
+  _parser: EParser;
+}
+
+interface IFetchOptions extends IRequestInit {}

@@ -1,2 +1,2 @@
-export { default as fetch } from './lib/fetch';
-export { default as fetchGraphql } from './lib/fetchGraphql';
+export { default as vetch } from './vetch';
+export { default as vetchG } from './vetchG';
