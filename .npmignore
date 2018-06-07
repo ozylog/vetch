@@ -14,12 +14,11 @@ Icon
 # --------------------
 node_modules/
 coverage/
-.nyc_output/
-dist/
+src/
 test/
-*.log
 
 # --------------------
 # Other Files
 # --------------------
 .vscode/
+*.log

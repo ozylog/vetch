@@ -36,8 +36,6 @@ export default vetch.bind({
     return this;
   },
   async exec() {
-    if (!this._options || !this._options.url) throw new Error('URL is required');
-
     const res = await request(this._options);
     let payload;
 
@@ -64,7 +62,7 @@ export default vetch.bind({
       payload
     };
   },
-  then(resolve: Promise<IResponse>, reject: any) {
+  then(resolve: any, reject: any) {
     return this.exec().then(resolve, reject);
   }
 });

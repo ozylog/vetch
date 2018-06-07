@@ -4,7 +4,7 @@ export function queryStringify(queryObject: IObject): string {
   let query: string = '';
 
   for (let key in queryObject) {
-    if (!queryObject.hasOwnProperty(key)) continue;
+    if (!{}.hasOwnProperty.call(queryObject, key)) continue;
 
     const value = queryObject[key];
     key = encodeURI(key);
@@ -28,14 +28,18 @@ export async function request(param: IRequestInit) {
   const { query, ...opts } = param;
 
   if (query) url += queryStringify(query);
-  if (opts.payload && typeof opts.payload === 'object') opts.payload = JSON.stringify(opts.payload);
+  if (opts.payload) {
+    if (typeof opts.payload === 'object') opts.body = JSON.stringify(opts.payload);
+    delete opts.payload;
+  }
 
   const res = await fetch(url, opts);
 
   if (!res.ok) {
-    const error = new Error(res.statusText);
+    const error: IVetchError = new Error(res.statusText);
 
-    Object.assign(error, res);
+    error.res = res;
+
     throw error;
   }
 
@@ -54,4 +58,8 @@ export interface IRequestInit extends RequestInit {
 
 export interface IResponse extends Response {
   payload?: any;
+}
+
+export interface IVetchError extends Error {
+  res?: Response;
 }
