@@ -1,6 +1,6 @@
 {
   "name": "vetch",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Simplified fetch that run on browser and node",
   "main": "./dist/index.js",
   "engines": {
