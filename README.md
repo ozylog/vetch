@@ -4,11 +4,14 @@
 
 ## Installation
 ```
-npm install vetch
+yarn add vetch // or npm install vetch
 ```
 
-## Usage Example
+## Usage
+```
 TBD
+```
+
 
 ## License
 MIT

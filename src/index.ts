@@ -1,10 +1,10 @@
-import { IRequestInit, IResponse, request } from './helpers';
+import { IRequestInit, IResponse, request } from './helper';
 
 function vetch(this: IFetch, options: IFetchOptions | string) {
   if (!options || (typeof options === 'object' && !options.url)) throw new Error('URL is required');
 
   this._options = typeof options === 'string' ? { url: options } : options;
-  this._parser = EParser.json;
+  this._parser = null;
 
   return this;
 }
@@ -36,7 +36,7 @@ export default vetch.bind({
     return this;
   },
   async exec() {
-    const res = await request(this._options);
+    let res: IResponse = await request(this._options);
     let payload;
 
     switch (this._parser) {
@@ -57,10 +57,9 @@ export default vetch.bind({
         break;
     }
 
-    return {
-      ...res,
-      payload
-    };
+    if (payload !== undefined) res = { ...res, payload };
+
+    return res;
   },
   then(resolve: any, reject: any) {
     return this.exec().then(resolve, reject);
@@ -77,7 +76,7 @@ enum EParser {
 
 interface IFetch {
   _options: IRequestInit;
-  _parser: EParser;
+  _parser: EParser | null;
 }
 
-interface IFetchOptions extends IRequestInit {}
+export interface IFetchOptions extends IRequestInit {}

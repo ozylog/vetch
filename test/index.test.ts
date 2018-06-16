@@ -1,5 +1,5 @@
 import nock from 'nock';
-import vetch from './../src/vetch';
+import vetch from './../src/index';
 
 describe('#vetch()', () => {
   describe('when response as json', () => {
@@ -58,13 +58,13 @@ describe('#vetch()', () => {
 
       nock('http://test.vetch.io')
         .get('/query')
-        .query({ hello: 'world' })
+        .query({ hello: 'world', arr: [ 1, 2, 3] })
         .reply(200, { hello: 'world' });
 
       response = await vetch({
         url: 'http://test.vetch.io/query',
         query
-      });
+      }).json();
     });
 
     afterAll(() => {
@@ -94,7 +94,7 @@ describe('#vetch()', () => {
         method: 'POST',
         url: 'http://test.vetch.io/payload',
         payload
-      });
+      }).json();
     });
 
     afterAll(() => {
@@ -107,6 +107,36 @@ describe('#vetch()', () => {
 
     test(`should return response.payload = { hello: 'world' }`, () => {
       expect(response.payload).toEqual({ hello: 'world' });
+    });
+  });
+
+  describe('when not parsing the request.body', () => {
+    let response;
+    const payload = { username: 'hello', password: 'world' };
+
+    beforeAll(async () => {
+      const query = { hello: 'world', arr: [ 'value1', 'value2' ] };
+      nock('http://test.vetch.io')
+        .post('/payload', (body) => body.username && body.password)
+        .reply(200, { hello: 'world' });
+
+      response = await vetch({
+        method: 'POST',
+        url: 'http://test.vetch.io/payload',
+        payload
+      });
+    });
+
+    afterAll(() => {
+      nock.cleanAll();
+    });
+
+    test(`should return response.status = 200`, () => {
+      expect(response.status).toBe(200);
+    });
+
+    test(`should return response.payload is undefined`, () => {
+      expect(response.payload).toBeUndefined();
     });
   });
 
