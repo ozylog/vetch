@@ -1,7 +1,7 @@
 {
   "name": "vetch",
-  "version": "0.0.0",
-  "description": "Simplified fetch that run on browser and node",
+  "version": "0.1.0",
+  "description": "Simple isomorphic fetch",
   "main": "./dist/index.js",
   "engines": {
     "node": ">=8.9.0 <9.0",
@@ -12,13 +12,12 @@
     "url": "https://github.com/ozylog/vetch.git"
   },
   "keywords": [
-    "fetch",
-    "graphql"
+    "fetch"
   ],
   "contributors": [
     "Cahya Pribadi <ozylog@gmail.com>"
   ],
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ozylog/vetch/issues"
   },
