@@ -3,12 +3,13 @@
     "baseUrl": ".",
     "declaration": true,
     "esModuleInterop": true,
-    "module": "CommonJS",
+    "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": true,
+    "noImplicitThis": false,
     "outDir": "dist",
     "strict": true,
-    "target": "ES6",
+    "target": "eS6",
   },
   "include": [
     "src/**/*"

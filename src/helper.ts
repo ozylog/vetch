@@ -1,6 +1,6 @@
 import 'isomorphic-fetch';
 
-export function queryStringify(queryObject: IObject): string {
+export function queryStringify(queryObject: Dictionary<any>): string {
   let query: string = '';
 
   for (let key in queryObject) {
@@ -23,7 +23,7 @@ export function queryStringify(queryObject: IObject): string {
   return query;
 }
 
-export async function request(param: IRequestInit) {
+export async function request(param: VetchOptions) {
   let { url } = param;
   const { query, ...opts } = param;
 
@@ -36,7 +36,7 @@ export async function request(param: IRequestInit) {
   const res = await fetch(url, opts);
 
   if (!res.ok) {
-    const error: IVetchError = new Error(res.statusText);
+    const error: VetchError = new Error(res.statusText);
 
     error.res = res;
 
@@ -46,20 +46,20 @@ export async function request(param: IRequestInit) {
   return res;
 }
 
-export interface IObject {
-  [propName: string]: any;
+export interface Dictionary<T> {
+  [propName: string]: T;
 }
 
-export interface IRequestInit extends RequestInit {
+export interface VetchOptions extends RequestInit {
   url: string;
-  query?: IObject;
-  payload?: RequestInit['body'] | IObject;
+  query?: Dictionary<any>;
+  payload?: RequestInit['body'] | Dictionary<any>;
 }
 
-export interface IResponse extends Response {
+export interface VetchResponse extends Response {
   payload?: any;
 }
 
-export interface IVetchError extends Error {
+export interface VetchError extends Error {
   res?: Response;
 }

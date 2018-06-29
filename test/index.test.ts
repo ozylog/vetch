@@ -85,7 +85,6 @@ describe('#vetch()', () => {
     const payload = { username: 'hello', password: 'world' };
 
     beforeAll(async () => {
-      const query = { hello: 'world', arr: [ 'value1', 'value2' ] };
       nock('http://test.vetch.io')
         .post('/payload', (body) => body.username && body.password)
         .reply(200, { hello: 'world' });
@@ -110,41 +109,12 @@ describe('#vetch()', () => {
     });
   });
 
-  describe('when not parsing the request.body', () => {
-    let response;
-    const payload = { username: 'hello', password: 'world' };
-
-    beforeAll(async () => {
-      const query = { hello: 'world', arr: [ 'value1', 'value2' ] };
-      nock('http://test.vetch.io')
-        .post('/payload', (body) => body.username && body.password)
-        .reply(200, { hello: 'world' });
-
-      response = await vetch({
-        method: 'POST',
-        url: 'http://test.vetch.io/payload',
-        payload
-      });
-    });
-
-    afterAll(() => {
-      nock.cleanAll();
-    });
-
-    test(`should return response.status = 200`, () => {
-      expect(response.status).toBe(200);
-    });
-
-    test(`should return response.payload is undefined`, () => {
-      expect(response.payload).toBeUndefined();
-    });
-  });
-
   describe('when there is no url for vetch(urlString)', () => {
     test(`should throw Error`, async () => {
       let error;
 
       try {
+        // @ts-ignore - Test purpose only
         await vetch();
       } catch (err) {
         error = err;
@@ -159,6 +129,7 @@ describe('#vetch()', () => {
       let error;
 
       try {
+        // @ts-ignore - Test purpose only
         await vetch({});
       } catch (err) {
         error = err;

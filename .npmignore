@@ -16,6 +16,9 @@ node_modules/
 coverage/
 src/
 test/
+tslint.json
+tsconfig.json
+.travis.yml
 
 # --------------------
 # Other Files

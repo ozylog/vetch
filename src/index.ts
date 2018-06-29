@@ -1,45 +1,18 @@
-import { IRequestInit, IResponse, request } from './helper';
+import { request, VetchOptions, VetchResponse } from './helper';
 
-function vetch(this: IFetch, options: IFetchOptions | string) {
+export default function vetch(options: VetchOptions | string): Vetch {
   if (!options || (typeof options === 'object' && !options.url)) throw new Error('URL is required');
 
-  this._options = typeof options === 'string' ? { url: options } : options;
-  this._parser = null;
+  const self = this as Vetch;
 
-  return this;
-}
+  self._options = typeof options === 'string' ? { url: options } : options;
+  self._parser = null;
 
-export default vetch.bind({
-  arrayBuffer() {
-    this._parser = EParser.arrayBuffer;
-
-    return this;
-  },
-  blob() {
-    this._parser = EParser.blob;
-
-    return this;
-  },
-  formData() {
-    this._parser = EParser.formData;
-
-    return this;
-  },
-  json() {
-    this._parser = EParser.json;
-
-    return this;
-  },
-  text() {
-    this._parser = EParser.text;
-
-    return this;
-  },
-  async exec() {
-    let res: IResponse = await request(this._options);
+  const exec = async () => {
+    let res: VetchResponse = await request(self._options);
     let payload;
 
-    switch (this._parser) {
+    switch (self._parser) {
       case EParser.arrayBuffer:
         payload = await res.arrayBuffer();
         break;
@@ -60,13 +33,42 @@ export default vetch.bind({
     if (payload !== undefined) res = { ...res, payload };
 
     return res;
-  },
-  then(resolve: any, reject: any) {
-    return this.exec().then(resolve, reject);
-  }
-});
+  };
 
-enum EParser {
+  self.arrayBuffer = () => {
+    self._parser = EParser.arrayBuffer;
+
+    return exec();
+  };
+
+  self.blob = () => {
+    self._parser = EParser.blob;
+
+    return exec();
+  };
+
+  self.formData = () => {
+    self._parser = EParser.formData;
+
+    return exec();
+  };
+
+  self.json = () => {
+    self._parser = EParser.json;
+
+    return exec();
+  };
+
+  self.text = () => {
+    self._parser = EParser.text;
+
+    return exec();
+  };
+
+  return self;
+}
+
+const enum EParser {
   arrayBuffer = 'arrayBuffer',
   blob = 'blob',
   formData = 'formData',
@@ -74,9 +76,12 @@ enum EParser {
   text = 'text'
 }
 
-interface IFetch {
-  _options: IRequestInit;
+export interface Vetch {
+  _options: VetchOptions;
   _parser: EParser | null;
+  arrayBuffer: () => Promise<VetchResponse>;
+  blob: () => Promise<VetchResponse>;
+  formData: () => Promise<VetchResponse>;
+  json: () => Promise<VetchResponse>;
+  text: () => Promise<VetchResponse>;
 }
-
-export interface IFetchOptions extends IRequestInit {}
