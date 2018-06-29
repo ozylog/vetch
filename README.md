@@ -66,13 +66,40 @@ vetch({
 });
 ```
 
-### Usage
-```
-vetch(url: string)
+### Fetch look-alike
 
-vetch(opts: VetchOptions)
+#### Request
+```
+// Fetch
+fetch(url: string);
+
+// Vetch
+vetch(url: string);
+
+-----------------------------------------------------------------------
+
+// Fetch
+fetch(url: string, options: FetchOptions);
+
+
+// Vetch
+vetch(VetchOptions);
+
+Which VetchOptions fields is all fields available in FetchOptions plus additional fields below
+
+| field   | required         | type                                         |
+|---------|------------------|----------------------------------------------|
+| url     | true             | string                                       |
+| query   | false (optional) | object                                       |
+| payload | false (optional) | all FetchOptions.body support plus an object |
 ```
 
+#### Response
+```
+Vetch response is pretty much same as Fetch response with additional "payload" field as parsed value of response.body.
+
+const { payload: users } = await vetch('/users').json();
+```
 
 ## License
 MIT
