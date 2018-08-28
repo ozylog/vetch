@@ -1,6 +1,6 @@
 # Vetch
 
-[![Travis](https://img.shields.io/travis/ozylog/vetch.svg)](https://travis-ci.org/ozylog/vetch)
+[![Travis](https://img.shields.io/travis/ozylog/vetch.svg)](https://travis-ci.org/ozylog/vetch) [![Coverage Status](https://coveralls.io/repos/github/ozylog/vetch/badge.svg?branch=develop)](https://coveralls.io/github/ozylog/vetch?branch=develop)
 
 ## Installation
 ```
@@ -96,9 +96,9 @@ Which VetchOptions fields is all fields available in FetchOptions plus additiona
 
 #### Response
 ```
-Vetch response is pretty much same as Fetch response with additional "payload" field as parsed value of response.body.
+Vetch response is pretty much same as Fetch response with additional "data" field as parsed value of response.body.
 
-const { payload: users } = await vetch('/users').json();
+const { data: users } = await vetch('/users').json();
 ```
 
 ## License

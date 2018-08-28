@@ -57,7 +57,7 @@ export interface VetchOptions extends RequestInit {
 }
 
 export interface VetchResponse extends Response {
-  payload?: any;
+  data?: any;
 }
 
 export interface VetchError extends Error {

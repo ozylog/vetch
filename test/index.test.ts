@@ -19,8 +19,8 @@ describe('#vetch()', () => {
       expect(response.status).toBe(200);
     });
 
-    test(`should return response.payload = { hello: 'world' }`, () => {
-      expect(response.payload).toEqual({ hello: 'world' });
+    test(`should return response.data = { hello: 'world' }`, () => {
+      expect(response.data).toEqual({ hello: 'world' });
     });
   });
 
@@ -41,8 +41,8 @@ describe('#vetch()', () => {
       expect(response.status).toBe(200);
     });
 
-    test(`should return response.payload = 'hello world'`, () => {
-      expect(response.payload).toEqual('hello world');
+    test(`should return response.data = 'hello world'`, () => {
+      expect(response.data).toEqual('hello world');
     });
   });
 
@@ -75,8 +75,8 @@ describe('#vetch()', () => {
       expect(response.status).toBe(200);
     });
 
-    test(`should return response.payload = { hello: 'world' }`, () => {
-      expect(response.payload).toEqual({ hello: 'world' });
+    test(`should return response.data = { hello: 'world' }`, () => {
+      expect(response.data).toEqual({ hello: 'world' });
     });
   });
 
@@ -104,8 +104,8 @@ describe('#vetch()', () => {
       expect(response.status).toBe(200);
     });
 
-    test(`should return response.payload = { hello: 'world' }`, () => {
-      expect(response.payload).toEqual({ hello: 'world' });
+    test(`should return response.data = { hello: 'world' }`, () => {
+      expect(response.data).toEqual({ hello: 'world' });
     });
   });
 
@@ -154,8 +154,8 @@ describe('#vetch()', () => {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toEqual('Bad Request');
 
-      const payloadError = await error.res.json();
-      expect(payloadError).toEqual({ message: 'Invalid data' });
+      const dataError = await error.res.json();
+      expect(dataError).toEqual({ message: 'Invalid data' });
 
       nock.cleanAll();
     });

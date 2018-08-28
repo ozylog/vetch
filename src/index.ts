@@ -10,27 +10,27 @@ export default function vetch(options: VetchOptions | string): Vetch {
 
   const exec = async () => {
     let res: VetchResponse = await request(self._options);
-    let payload;
+    let data;
 
     switch (self._parser) {
       case EParser.arrayBuffer:
-        payload = await res.arrayBuffer();
+        data = await res.arrayBuffer();
         break;
       case EParser.blob:
-        payload = await res.blob();
+        data = await res.blob();
         break;
       case EParser.formData:
-        payload = await res.formData();
+        data = await res.formData();
         break;
       case EParser.json:
-        payload = await res.json();
+        data = await res.json();
         break;
       case EParser.text:
-        payload = await res.text();
+        data = await res.text();
         break;
     }
 
-    if (payload !== undefined) res = { ...res, payload };
+    if (data !== undefined) res = { ...res, data };
 
     return res;
   };
