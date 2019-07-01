@@ -11,58 +11,36 @@ or
 npm install vetch
 ```
 
-### Isomorphic
-Browser and node compatible.
+## Features
+- Browser and node compatible
+- Built-in typings
 
-### Simple
+## Usage Examples
 ```
-// Fetch
-function checkStatus(response) {
-  if (response.status >= 200 && response.status < 300) {
-    return response
-  } else {
-    var error = new Error(response.statusText)
-    error.response = response
-    throw error
-  }
-}
+const { data, headers } = await vetch('/users').json();
+// note: data is json parsed response body
 
-function parseJSON(response) {
-  return response.json()
-}
-
-fetch('/users')
-  .then(checkStatus)
-  .then(parseJSON)
-  .then(function(data) {
-    console.log('request succeeded with JSON response', data)
-  }).catch(function(error) {
-    console.log('request failed', error)
-  });
-
-
-// Vetch
-vetch('/users').json()
-  .then(function(data) {
-    console.log('request succeeded with JSON response', data)
-  }).catch(function(error) {
-    console.log('request failed', error)
-  });
-```
-
-### Support object query
-```
-// Fetch
-fetch('/users?ids[]=1&ids[]=2&city=auckland');
-
-// Vetch
-vetch({
-  url: '/users',
+// support object for request.query
+const { data, headers } = await vetch('/users', {
   query: {
     ids: [ 1, 2 ],
     city: 'auckland'
   }
-});
+}).json();
+// note: for url /users?ids[]=1&ids[]=2&city=auckland
+
+// support object for request.body
+const { data, headers } = await vetch('/users', {
+  method: 'POST',
+  payload: { name: 'John'}
+}).json();
+// fetch.option.body: JSON.stringify({ name: 'John' }) equivalent
+
+
+
+```
+
+
 ```
 
 ### Fetch look-alike

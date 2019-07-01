@@ -23,9 +23,8 @@ export function queryStringify(queryObject: Dictionary<any>): string {
   return query;
 }
 
-export async function request(param: VetchOptions) {
-  let { url } = param;
-  const { query, ...opts } = param;
+export async function request(url: string, options: VetchOptions = {}) {
+  const { query, ...opts } = options;
 
   if (query) url += queryStringify(query);
   if (opts.payload) {
@@ -51,7 +50,6 @@ export interface Dictionary<T> {
 }
 
 export interface VetchOptions extends RequestInit {
-  url: string;
   query?: Dictionary<any>;
   payload?: RequestInit['body'] | Dictionary<any>;
 }
