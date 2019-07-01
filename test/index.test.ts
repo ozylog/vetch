@@ -1,9 +1,10 @@
 import nock from 'nock';
 import vetch from './../src/index';
+import { VetchResponse } from '../src/helper';
 
 describe('#vetch()', () => {
   describe('when response as json', () => {
-    let response;
+    let response: VetchResponse | undefined;
 
     beforeAll(async () => {
       nock('http://test.vetch.io').get('/json').reply(200, { hello: 'world' });
@@ -16,16 +17,20 @@ describe('#vetch()', () => {
     });
 
     test(`should return response.status = 200`, () => {
-      expect(response.status).toBe(200);
+      expect(response!.status).toBe(200);
     });
 
     test(`should return response.data = { hello: 'world' }`, () => {
-      expect(response.data).toEqual({ hello: 'world' });
+      expect(response!.data).toEqual({ hello: 'world' });
+    });
+
+    test(`should return headers`, () => {
+      expect(response!.headers).toBeDefined;
     });
   });
 
   describe('when response as text', () => {
-    let response;
+    let response: VetchResponse | undefined;
 
     beforeAll(async () => {
       nock('http://test.vetch.io').get('/text').reply(200, 'hello world');
@@ -38,16 +43,20 @@ describe('#vetch()', () => {
     });
 
     test(`should return response.status = 200`, () => {
-      expect(response.status).toBe(200);
+      expect(response!.status).toBe(200);
     });
 
     test(`should return response.data = 'hello world'`, () => {
-      expect(response.data).toEqual('hello world');
+      expect(response!.data).toEqual('hello world');
+    });
+
+    test(`should return headers`, () => {
+      expect(response!.headers).toBeDefined;
     });
   });
 
   describe('when using query object', () => {
-    let response;
+    let response: VetchResponse | undefined;
 
     beforeAll(async () => {
       const object = { test: 123 };
@@ -72,16 +81,20 @@ describe('#vetch()', () => {
     });
 
     test(`should return response.status = 200`, () => {
-      expect(response.status).toBe(200);
+      expect(response!.status).toBe(200);
     });
 
     test(`should return response.data = { hello: 'world' }`, () => {
-      expect(response.data).toEqual({ hello: 'world' });
+      expect(response!.data).toEqual({ hello: 'world' });
+    });
+
+    test(`should return headers`, () => {
+      expect(response!.headers).toBeDefined;
     });
   });
 
   describe('when using payload', () => {
-    let response;
+    let response: VetchResponse | undefined;
     const payload = { username: 'hello', password: 'world' };
 
     beforeAll(async () => {
@@ -101,11 +114,15 @@ describe('#vetch()', () => {
     });
 
     test(`should return response.status = 200`, () => {
-      expect(response.status).toBe(200);
+      expect(response!.status).toBe(200);
     });
 
     test(`should return response.data = { hello: 'world' }`, () => {
-      expect(response.data).toEqual({ hello: 'world' });
+      expect(response!.data).toEqual({ hello: 'world' });
+    });
+
+    test(`should return headers`, () => {
+      expect(response!.headers).toBeDefined;
     });
   });
 

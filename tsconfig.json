@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "declaration": true,
     "esModuleInterop": true,
+    "lib": [ "es5", "es2015", "es2017", "dom" ],
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": true,

@@ -6,11 +6,10 @@
 ```
 yarn add vetch
 ```
-
-## Why
-
-### Typescript friendly
-Built with and for Typescript. no @types packages needed.
+or
+```
+npm install vetch
+```
 
 ### Isomorphic
 Browser and node compatible.

@@ -1,5 +1,23 @@
 import { request, VetchOptions, VetchResponse } from './helper';
 
+const enum EParser {
+  arrayBuffer = 'arrayBuffer',
+  blob = 'blob',
+  formData = 'formData',
+  json = 'json',
+  text = 'text'
+}
+
+export interface Vetch {
+  _options: VetchOptions;
+  _parser: EParser | null;
+  arrayBuffer: () => Promise<VetchResponse>;
+  blob: () => Promise<VetchResponse>;
+  formData: () => Promise<VetchResponse>;
+  json: () => Promise<VetchResponse>;
+  text: () => Promise<VetchResponse>;
+}
+
 export default function vetch(options: VetchOptions | string): Vetch {
   if (!options || (typeof options === 'object' && !options.url)) throw new Error('URL is required');
 
@@ -66,22 +84,4 @@ export default function vetch(options: VetchOptions | string): Vetch {
   };
 
   return self;
-}
-
-const enum EParser {
-  arrayBuffer = 'arrayBuffer',
-  blob = 'blob',
-  formData = 'formData',
-  json = 'json',
-  text = 'text'
-}
-
-export interface Vetch {
-  _options: VetchOptions;
-  _parser: EParser | null;
-  arrayBuffer: () => Promise<VetchResponse>;
-  blob: () => Promise<VetchResponse>;
-  formData: () => Promise<VetchResponse>;
-  json: () => Promise<VetchResponse>;
-  text: () => Promise<VetchResponse>;
 }

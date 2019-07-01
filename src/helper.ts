@@ -1,7 +1,7 @@
 import 'isomorphic-fetch';
 
 export function queryStringify(queryObject: Dictionary<any>): string {
-  let query: string = '';
+  let query = '';
 
   for (let key in queryObject) {
     if (!{}.hasOwnProperty.call(queryObject, key)) continue;
