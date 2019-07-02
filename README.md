@@ -16,7 +16,6 @@ npm install vetch
 - Built-in typings
 - `Fetch` context is not changed
 
-
 ## Request
 
 ```
@@ -34,7 +33,7 @@ All fetch [optional fields](https://github.github.io/fetch/#options) plus additi
 
 ## Chained Methods<a name="methods"></a>
 
-Some methods to parse response.body:
+Some methods for response.body:
 
 - text()
 - json()
