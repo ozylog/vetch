@@ -32,17 +32,7 @@ export async function request(url: string, options: VetchOptions = {}) {
     delete opts.payload;
   }
 
-  const res = await fetch(url, opts);
-
-  if (!res.ok) {
-    const error: VetchError = new Error(res.statusText);
-
-    error.res = res;
-
-    throw error;
-  }
-
-  return res;
+  return await fetch(url, opts);
 }
 
 export interface Dictionary<T> {

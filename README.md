@@ -11,11 +11,45 @@ or
 npm install vetch
 ```
 
-## Features
+## Good Things
 - Browser and node compatible
 - Built-in typings
+- `Fetch` context is not changed
 
-## Usage Examples
+
+## Request
+
+```
+vetch(url: string, options?: Options)
+```
+
+Options
+
+All fetch [optional fields](https://github.github.io/fetch/#options) plus additional fields below.
+
+| field   | type                                                             |
+|---------|------------------------------------------------------------------|
+| query   | Object                                                           |
+| payload | [options.body](https://github.github.io/fetch/#request-body) + Object |
+
+## Chained Methods<a name="methods"></a>
+
+some methods to parse response.body:
+
+- text()
+- json()
+- blob()
+- arrayBuffer()
+- formData()
+
+You can chain those methods after `vetch()` function. See [examples](#example) below for details.
+
+## Response
+
+Same response as `fetch`. Click [here](https://github.github.io/fetch/#Response) for details.
+If `vetch` will be called alongside with one of [chained methods](#methods) above. Response will return additional field called `data` which contains parsed data of response body.
+
+## Examples<a name="example"></a>
 ```
 const { data, headers } = await vetch('/users').json();
 // note: data is json parsed response body
@@ -36,46 +70,8 @@ const { data, headers } = await vetch('/users', {
 }).json();
 // fetch.option.body: JSON.stringify({ name: 'John' }) equivalent
 
-
-
-```
-
-
-```
-
-### Fetch look-alike
-
-#### Request
-```
-// Fetch
-fetch(url: string);
-
-// Vetch
-vetch(url: string);
-
------------------------------------------------------------------------
-
-// Fetch
-fetch(url: string, options: FetchOptions);
-
-
-// Vetch
-vetch(VetchOptions);
-
-Which VetchOptions fields is all fields available in FetchOptions plus additional fields below
-
-| field   | required         | type                                         |
-|---------|------------------|----------------------------------------------|
-| url     | true             | string                                       |
-| query   | false (optional) | object                                       |
-| payload | false (optional) | all FetchOptions.body support plus an object |
-```
-
-#### Response
-```
-Vetch response is pretty much same as Fetch response with additional "data" field as parsed value of response.body.
-
-const { data: users } = await vetch('/users').json();
+// If you don't need to parse response body
+const response = await vetch('/users');
 ```
 
 ## License

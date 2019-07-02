@@ -137,15 +137,13 @@ describe('#vetch()', () => {
     });
 
     test(`should return response.status = 200`, () => {
-      console.log(response)
       expect(response!.status).toBe(200);
     });
 
     test(`should return native response`, async () => {
       expect(response!.data).toEqual(undefined);
-      console.log(response);
-      // const parsedbody = await response.json();
-      //expect(parsedbody).toEqual({ hello: 'world' });
+      const parsedbody = await response.json();
+      expect(parsedbody).toEqual({ hello: 'world' });
     });
 
     test(`should return headers`, () => {
@@ -185,24 +183,28 @@ describe('#vetch()', () => {
   });
 
   describe('when response status code = 400', () => {
-    test(`should throws error`, async () => {
+    let response: VetchResponse | undefined;
+
+    beforeAll(async () => {
       nock('http://test.vetch.io').get('/json').reply(400, { message: 'Invalid data' });
 
-      let error;
+      response = await vetch('http://test.vetch.io/json').json();
+    });
 
-      try {
-        await vetch('http://test.vetch.io/json').json();
-      } catch (err) {
-        error = err;
-      }
-
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toEqual('Bad Request');
-
-      const dataError = await error.res.json();
-      expect(dataError).toEqual({ message: 'Invalid data' });
-
+    afterAll(() => {
       nock.cleanAll();
+    });
+
+    test(`should return response.status = 400`, () => {
+      expect(response!.status).toBe(400);
+    });
+
+    test(`should return response.data = { message: 'Invalid data' }`, () => {
+      expect(response!.data).toEqual({ message: 'Invalid data' });
+    });
+
+    test(`should return headers`, () => {
+      expect(response!.headers).toBeDefined;
     });
   });
 });

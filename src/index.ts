@@ -1,45 +1,41 @@
 import Vetch, { EParser } from './Vetch';
-import { VetchOptions, VetchResponse } from './helper';
+import { VetchOptions } from './helper';
 
 export default function vetch(url: string, options?: VetchOptions) {
   if (!url) throw new Error('URL is required');
 
-
   const vetch = new Vetch(url, options);
 
-  const exec = async () => {
-
-    return await vetch.exec()
-  };
+  this.then = (resolve: any, reject:any) => vetch.exec().then(resolve).catch(reject);
 
   this.arrayBuffer = () => {
     vetch.parser = EParser.arrayBuffer;
 
-    return exec();
+    return this;
   };
 
   this.blob = () => {
     vetch.parser = EParser.blob;
 
-    return exec();
+    return this;
   };
 
   this.formData = () => {
     vetch.parser = EParser.formData;
 
-    return exec();
+    return this;
   };
 
   this.json = () => {
     vetch.parser = EParser.json;
 
-    return exec();
+    return this;
   };
 
   this.text = () => {
     vetch.parser = EParser.text;
 
-    return exec();
+    return this;
   };
 
   return this;
