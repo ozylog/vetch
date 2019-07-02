@@ -1,6 +1,6 @@
 # Vetch
 
-[![Travis](https://img.shields.io/travis/ozylog/vetch.svg)](https://travis-ci.org/ozylog/vetch) [![Coverage Status](https://coveralls.io/repos/github/ozylog/vetch/badge.svg?branch=develop)](https://coveralls.io/github/ozylog/vetch?branch=develop)
+[![Travis](https://img.shields.io/travis/ozylog/vetch.svg?branch=master)](https://travis-ci.org/ozylog/vetch.svg?branch=master) [![Coverage Status](https://coveralls.io/repos/github/ozylog/vetch/badge.svg?branch=master)](https://coveralls.io/github/ozylog/vetch?branch=master)
 
 ## Installation
 ```
@@ -34,7 +34,7 @@ All fetch [optional fields](https://github.github.io/fetch/#options) plus additi
 
 ## Chained Methods<a name="methods"></a>
 
-some methods to parse response.body:
+Some methods to parse response.body:
 
 - text()
 - json()
