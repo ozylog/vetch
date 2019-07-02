@@ -1,7 +1,7 @@
 import 'isomorphic-fetch';
 
 export function queryStringify(queryObject: Dictionary<any>): string {
-  let query: string = '';
+  let query = '';
 
   for (let key in queryObject) {
     if (!{}.hasOwnProperty.call(queryObject, key)) continue;
@@ -23,9 +23,8 @@ export function queryStringify(queryObject: Dictionary<any>): string {
   return query;
 }
 
-export async function request(param: VetchOptions) {
-  let { url } = param;
-  const { query, ...opts } = param;
+export async function request(url: string, options: VetchOptions = {}) {
+  const { query, ...opts } = options;
 
   if (query) url += queryStringify(query);
   if (opts.payload) {
@@ -33,17 +32,7 @@ export async function request(param: VetchOptions) {
     delete opts.payload;
   }
 
-  const res = await fetch(url, opts);
-
-  if (!res.ok) {
-    const error: VetchError = new Error(res.statusText);
-
-    error.res = res;
-
-    throw error;
-  }
-
-  return res;
+  return await fetch(url, opts);
 }
 
 export interface Dictionary<T> {
@@ -51,7 +40,6 @@ export interface Dictionary<T> {
 }
 
 export interface VetchOptions extends RequestInit {
-  url: string;
   query?: Dictionary<any>;
   payload?: RequestInit['body'] | Dictionary<any>;
 }
