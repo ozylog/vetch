@@ -4,7 +4,7 @@
   "description": "Simple isomorphic fetch",
   "main": "./dist/index.js",
   "engines": {
-    "node": ">=8.9.0 <9.0",
+    "node": ">=8.9.0 <11.0",
     "yarn": ">=1.3.2"
   },
   "repository": {
