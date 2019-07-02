@@ -24,7 +24,8 @@
   "homepage": "https://github.com/ozylog/vetch.git#readme",
   "scripts": {
     "build": "rm -rf dist && tsc",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "coverage": "cat ./coverage/lcov.info | yarn coveralls"
   },
   "types": "dist/index.d.ts",
   "dependencies": {
@@ -34,6 +35,7 @@
     "@types/isomorphic-fetch": "^0.0.35",
     "@types/jest": "^24.0.15",
     "@types/nock": "^10.0.3",
+    "coveralls": "^3.0.4",
     "jest": "^24.8.0",
     "nock": "^10.0.6",
     "ts-jest": "^24.0.2",
