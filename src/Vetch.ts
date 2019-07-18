@@ -13,7 +13,7 @@ export default class Vetch {
   private _url!: string;
   private _parser!: EParser;
 
-  constructor(url: string, options?: VetchOptions) {
+  public constructor(url: string, options?: VetchOptions) {
     this._url = url;
     this._options = options;
   }

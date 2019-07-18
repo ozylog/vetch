@@ -6,7 +6,7 @@ export default function vetch(url: string, options?: VetchOptions) {
 
   const vetch = new Vetch(url, options);
 
-  this.then = (resolve: any, reject:any) => vetch.exec().then(resolve).catch(reject);
+  this.then = (resolve: any, reject: any) => vetch.exec().then(resolve).catch(reject);
 
   this.arrayBuffer = () => {
     vetch.parser = EParser.arrayBuffer;
