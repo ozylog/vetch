@@ -60,7 +60,7 @@ You can chain those methods after `vetch()` function. See [usage examples](#usag
 (*) Some methods are not available on certain fetch versions
 
 ## Response
-Same as [Fetch response]https://github.github.io/fetch/#Response) with additional field called `data` which contains parsed data of the response body if `vetch` will be called alongside with one of the [chained methods](#chained-methods) above.
+Same as [Fetch response](https://github.github.io/fetch/#Response) with additional field called `data` which contains parsed data of the response body if `vetch` will be called alongside with one of the [chained methods](#chained-methods) above.
 
 ## Usage Examples
 ```
