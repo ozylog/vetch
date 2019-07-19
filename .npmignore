@@ -16,12 +16,13 @@ node_modules/
 coverage/
 src/
 test/
-tslint.json
 tsconfig.json
 .travis.yml
+yarn.lock
 
 # --------------------
 # Other Files
 # --------------------
 .vscode/
 *.log
+.gitignore

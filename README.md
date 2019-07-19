@@ -1,23 +1,39 @@
 # Vetch
+![Travis](https://badgen.net/travis/ozylog/vetch/master)
+![Coveralls](https://badgen.net/coveralls/c/github/ozylog/vetch/master)
+![Bundlephobia](https://badgen.net/bundlephobia/minzip/vetch)
+![David](https://badgen.net/david/dev/ozylog/vetch)
+![npm](https://badgen.net/npm/v/vetch)
+![NPM](https://badgen.net/npm/license/vetch)
 
-[![Travis](https://img.shields.io/travis/ozylog/vetch.svg?branch=master)](https://travis-ci.org/ozylog/vetch.svg?branch=master) [![Coverage Status](https://coveralls.io/repos/github/ozylog/vetch/badge.svg?branch=master)](https://coveralls.io/github/ozylog/vetch?branch=master)
+Simple fetch-wrapper. < 1Kb gzipped
 
-## Installation
+## Install
 ```
 yarn add vetch
 ```
-or
+
+## Configuration
+For nodejs, please install [node-fetch](https://www.npmjs.com/package/node-fetch) package then call function `setVetch` in main or index file.
 ```
-npm install vetch
+import { setVetch } from 'vetch';
+import fetch from 'node-fetch';
+
+setVetch({ fetch });
+```
+
+For browser, please install [whatwg-fetch](https://www.npmjs.com/package/whatwg-fetch) then import that package in main or index file.
+```
+import 'whatwg-fetch';
 ```
 
 ## Good Things
 - Browser and node compatible
-- Built-in typings
-- `Fetch` context is not changed
+- Built-in typings. Please add `dom` in `compilerOptions.lib` in your tsconfig.json
+- What you can do on fetch, you can do on vetch too.
+- Zero dependencies
 
 ## Request
-
 ```
 vetch(url: string, options?: Options)
 ```
@@ -31,24 +47,22 @@ All fetch [optional fields](https://github.github.io/fetch/#options) plus additi
 | query   | Object                                                           |
 | payload | [options.body](https://github.github.io/fetch/#request-body) + Object |
 
-## Chained Methods<a name="methods"></a>
-
+## Chained Methods
 Some methods for response.body:
-
 - text()
 - json()
-- blob()
-- arrayBuffer()
-- formData()
+- blob() *
+- arrayBuffer() *
+- formData() *
 
-You can chain those methods after `vetch()` function. See [examples](#example) below for details.
+You can chain those methods after `vetch()` function. See [usage examples](#usage-examples) below for details.
+
+(*) Some methods are not available on certain fetch versions
 
 ## Response
+Same as [Fetch response](https://github.github.io/fetch/#Response) with additional field called `data` which contains parsed data of the response body if `vetch` will be called alongside with one of the [chained methods](#chained-methods) above.
 
-Same response as `fetch`. Click [here](https://github.github.io/fetch/#Response) for details.
-If `vetch` will be called alongside with one of [chained methods](#methods) above. Response will return additional field called `data` which contains parsed data of response body.
-
-## Examples<a name="example"></a>
+## Usage Examples
 ```
 const { data, headers } = await vetch('/users').json();
 // note: data is json parsed response body

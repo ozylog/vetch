@@ -1,5 +1,3 @@
-import { request, VetchOptions, VetchResponse } from './helper';
-
 export const enum EParser {
   arrayBuffer = 'arrayBuffer',
   blob = 'blob',
@@ -8,18 +6,53 @@ export const enum EParser {
   text = 'text'
 }
 
+function queryStringify(queryObject: Dictionary<any>): string {
+  let query = '';
+
+  for (let key in queryObject) {
+    if (!{}.hasOwnProperty.call(queryObject, key)) continue;
+
+    const value = queryObject[key];
+    key = encodeURI(key);
+
+    if (value instanceof Array) {
+      for (const item of value) {
+        query += `&${key}[]=${encodeURI(item)}`;
+      }
+    } else {
+      query += `&${key}=${encodeURI(value)}`;
+    }
+  }
+
+  if (query) query = `?${query.substr(1)}`;
+
+  return query;
+}
+
 export default class Vetch {
-  private _options!: VetchOptions | undefined;
+  private _options!: VetchOptions;
   private _url!: string;
   private _parser!: EParser;
 
-  constructor(url: string, options?: VetchOptions) {
+  public static fetch: any = window && window.fetch;
+
+  public constructor(url: string, options: VetchOptions = {}) {
     this._url = url;
     this._options = options;
   }
 
   public async exec() {
-    let res: VetchResponse = await request(this._url, this._options);
+    const { query, ...opts } = this._options;
+
+    if (!Vetch.fetch) throw new Error('fetch is not defined');
+
+    if (query) this._url += queryStringify(query);
+    if (opts.payload) {
+      if (typeof opts.payload === 'object') opts.body = JSON.stringify(opts.payload);
+      delete opts.payload;
+    }
+
+    const res = await Vetch.fetch(this._url, opts);
     let data;
 
     switch (this._parser) {
@@ -40,7 +73,7 @@ export default class Vetch {
         break;
     }
 
-    if (data !== undefined) res = { ...res, data };
+    if (data !== undefined) res.data = data;
 
     return res;
   };
@@ -48,5 +81,17 @@ export default class Vetch {
   public set parser(type: EParser) {
     this._parser = type;
   }
+}
 
+export interface Dictionary<T> {
+  [propName: string]: T;
+}
+
+export interface VetchOptions extends RequestInit {
+  query?: Dictionary<any>;
+  payload?: RequestInit['body'] | Dictionary<any>;
+}
+
+export interface VetchResponse extends Response {
+  data?: any;
 }
