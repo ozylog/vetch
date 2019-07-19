@@ -1,8 +1,13 @@
 import nock from 'nock';
-import vetch from './../src/index';
+import fetch from 'node-fetch';
+import vetch, { setFetch } from './../src/index';
 import { VetchResponse } from '../src/helper';
 
 describe('#vetch()', () => {
+  beforeAll(() => {
+    setFetch(fetch);
+  });
+
   describe('when response as json', () => {
     let response: VetchResponse | undefined;
 

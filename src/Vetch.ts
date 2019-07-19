@@ -19,7 +19,7 @@ export default class Vetch {
   }
 
   public async exec() {
-    let res: VetchResponse = await request(this._url, this._options);
+    const res: VetchResponse = await request(this._url, this._options);
     let data;
 
     switch (this._parser) {
@@ -40,7 +40,7 @@ export default class Vetch {
         break;
     }
 
-    if (data !== undefined) res = { ...res, data };
+    if (data !== undefined) res.data = data;
 
     return res;
   };

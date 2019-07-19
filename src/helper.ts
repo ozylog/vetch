@@ -1,4 +1,4 @@
-import 'isomorphic-fetch';
+import { getFetch } from './index';
 
 export function queryStringify(queryObject: Dictionary<any>): string {
   let query = '';
@@ -24,6 +24,7 @@ export function queryStringify(queryObject: Dictionary<any>): string {
 }
 
 export async function request(url: string, options: VetchOptions = {}) {
+  const fetch = getFetch();
   const { query, ...opts } = options;
 
   if (query) url += queryStringify(query);
@@ -46,8 +47,4 @@ export interface VetchOptions extends RequestInit {
 
 export interface VetchResponse extends Response {
   data?: any;
-}
-
-export interface VetchError extends Error {
-  res?: Response;
 }
