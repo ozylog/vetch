@@ -1,5 +1,5 @@
-import Vetch, { EParser } from './Vetch';
-import { VetchOptions } from './helper';
+import Vetch, { EParser, VetchOptions } from './Vetch';
+export { VetchOptions, VetchResponse } from './Vetch';
 
 export default function vetch(url: string, options?: VetchOptions) {
   if (!url) throw new Error('URL is required');
@@ -41,12 +41,10 @@ export default function vetch(url: string, options?: VetchOptions) {
   return this;
 }
 
-let fetchFunction: any;
-
-export function setFetch(f: any) {
-  fetchFunction = f;
+interface Options {
+  fetch: any;
 }
 
-export function getFetch() {
-  return fetchFunction;
+export function setVetch({ fetch }: Options) {
+  if (fetch) Vetch.fetch = fetch;
 }
