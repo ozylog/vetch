@@ -1,25 +1,24 @@
 {
   "name": "vetch",
-  "version": "2.0.0",
-  "description": "Simple isomorphic fetch-wrapper",
+  "version": "2.0.1",
+  "description": "Simple fetch-wrapper",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "private": false,
+  "license": "MIT",
   "engines": {
     "node": ">=8.9.0 <11.0",
     "yarn": ">=1.3.2"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ozylog/vetch.git"
-  },
+  "repository": "git@github.com:ozylog/vetch.git",
   "keywords": [
     "fetch",
-    "fetch wrapper",
+    "fetch-wrapper",
     "typescript"
   ],
   "contributors": [
     "Cahya Pribadi <ozylog@gmail.com>"
   ],
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ozylog/vetch/issues"
   },
@@ -29,7 +28,6 @@
     "test": "eslint ./src/* --fix && jest --coverage",
     "coverage": "cat ./coverage/lcov.info | yarn coveralls"
   },
-  "types": "dist/index.d.ts",
   "devDependencies": {
     "@types/isomorphic-fetch": "^0.0.35",
     "@types/jest": "^24.0.15",
@@ -72,9 +70,6 @@
           "args": "none"
         }
       ]
-    },
-    "globals": {
-      "fetch": true
     }
   },
   "jest": {
