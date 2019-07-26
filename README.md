@@ -1,19 +1,19 @@
 # Vetch
-![Travis](https://badgen.net/travis/ozylog/vetch/master)
-![Coveralls](https://badgen.net/coveralls/c/github/ozylog/vetch/master)
-![Bundlephobia](https://badgen.net/bundlephobia/minzip/vetch)
-![David](https://badgen.net/david/dev/ozylog/vetch)
-![npm](https://badgen.net/npm/v/vetch)
-![NPM](https://badgen.net/npm/license/vetch)
+![Build](https://badgen.net/travis/ozylog/vetch/master)
+![Coverage](https://badgen.net/coveralls/c/github/ozylog/vetch/master)
+![Size](https://badgen.net/bundlephobia/minzip/vetch)
+![DevDependencies](https://badgen.net/david/dev/ozylog/vetch)
+![LatestVersion](https://badgen.net/npm/v/vetch)
+![License](https://badgen.net/npm/license/vetch)
 
-Simple fetch-wrapper. < 1Kb gzipped
+Simple fetch-wrapper
 
 ## Install
 ```
 yarn add vetch
 ```
 
-## Configuration
+## Setup
 For nodejs, please install [node-fetch](https://www.npmjs.com/package/node-fetch) package then call function `setVetch` in main or index file.
 ```
 import { setVetch } from 'vetch';
@@ -27,7 +27,7 @@ For browser, please install [whatwg-fetch](https://www.npmjs.com/package/whatwg-
 import 'whatwg-fetch';
 ```
 
-## Good Things
+## Perks
 - Browser and node compatible
 - Built-in typings. Please add `dom` in `compilerOptions.lib` in your tsconfig.json
 - What you can do on fetch, you can do on vetch too.
