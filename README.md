@@ -1,4 +1,4 @@
-# Vetch
+# vetch
 ![Build](https://badgen.net/travis/ozylog/vetch/master)
 ![Coverage](https://badgen.net/coveralls/c/github/ozylog/vetch/master)
 ![Size](https://badgen.net/bundlephobia/minzip/vetch)
