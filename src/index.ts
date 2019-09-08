@@ -1,94 +1,87 @@
-// import Vetch, { EParser, VetchOptions } from './Vetch';
-// export { VetchOptions, VetchResponse } from './Vetch';
-
 let fetch: any = window && window.fetch;
 
 export function setVetch(options: Options) {
   if (options.fetch) fetch = options.fetch;
 }
 
-
-export default function vetch(url: string, options?: VetchOptions) {
+export default function vetch<T=any>(url: string, options?: VetchOptions): VetchResult<VetchResponse<T>, VetchResponse<undefined>> {
   if (!url) throw new Error('URL is required');
 
-  this._url = url;
-  this._options = options;
+  let parser: EParser | null = null;
+  const exec = async (): Promise<VetchResponse<T>> => {
+    const { query, ...opts } = options || {};
 
-  return this;
+    if (!fetch) throw new Error('fetch is not defined');
 
-  /*
-  this.then = (resolve: any, reject: any) => v.exec().then(resolve).catch(reject);
+    if (query) url += queryStringify(query);
+    if (opts.payload) {
+      if (typeof opts.payload === 'object') opts.body = JSON.stringify(opts.payload);
+      delete opts.payload;
+    }
 
-  this.arrayBuffer = () => {
-    v.parser = EParser.arrayBuffer;
+    const res = await fetch(url, opts);
+    let data;
 
-    return this;
+    switch (parser) {
+      case EParser.arrayBuffer:
+        data = await res.arrayBuffer();
+        break;
+      case EParser.blob:
+        data = await res.blob();
+        break;
+      case EParser.formData:
+        data = await res.formData();
+        break;
+      case EParser.json:
+        data = await res.json();
+        break;
+      case EParser.text:
+        data = await res.text();
+        break;
+    }
+
+    if (data !== undefined) res.data = data;
+
+    return res;
   };
 
-  this.blob = () => {
-    v.parser = EParser.blob;
-
-    return this;
+  const then = (resolve: any, reject: any) => {
+    return exec().then(resolve).catch(reject);
   };
 
-  this.formData = () => {
-    v.parser = EParser.formData;
+  const arrayBuffer = () => {
+    parser = EParser.arrayBuffer;
 
-    return this;
+    return exec();
   };
 
-  this.json = () => {
-    v.parser = EParser.json;
+  const blob = () => {
+    parser = EParser.blob;
 
-    return this;
+    return exec();
   };
 
-  this.text = () => {
-    v.parser = EParser.text;
+  const formData = () => {
+    parser = EParser.formData;
 
-    return this;
+    return exec();
   };
 
-  return this;
-  */
+  const json = () => {
+    parser = EParser.json;
+
+    return exec();
+  };
+
+  const text = () => {
+    parser = EParser.text;
+
+    return exec();
+  };
+
+  // @ts-ignore
+  return { arrayBuffer, blob, formData, json, text, then };
 }
-
-vetch.prototype.exec = function exec() {
-  const { query, ...opts } = this._options;
-
-  if (!Vetch.fetch) throw new Error('fetch is not defined');
-
-  if (query) this._url += queryStringify(query);
-  if (opts.payload) {
-    if (typeof opts.payload === 'object') opts.body = JSON.stringify(opts.payload);
-    delete opts.payload;
-  }
-
-  const res = await Vetch.fetch(this._url, opts);
-  let data;
-
-  switch (this._parser) {
-    case EParser.arrayBuffer:
-      data = await res.arrayBuffer();
-      break;
-    case EParser.blob:
-      data = await res.blob();
-      break;
-    case EParser.formData:
-      data = await res.formData();
-      break;
-    case EParser.json:
-      data = await res.json();
-      break;
-    case EParser.text:
-      data = await res.text();
-      break;
-  }
-
-  if (data !== undefined) res.data = data;
-
-  return res;
-};
 
 function queryStringify(queryObject: Dictionary<any>): string {
   let query = '';
@@ -113,8 +106,35 @@ function queryStringify(queryObject: Dictionary<any>): string {
   return query;
 }
 
+const enum EParser {
+  arrayBuffer = 'arrayBuffer',
+  blob = 'blob',
+  formData = 'formData',
+  json = 'json',
+  text = 'text'
+}
+
+interface VetchResult<T, K> extends Promise<K> {
+  arrayBuffer(): Promise<T>;
+  blob(): Promise<T>;
+  formData(): Promise<T>;
+  json(): Promise<T>;
+  test(): Promise<T>;
+}
+
+interface VetchOptions extends RequestInit {
+  query?: Dictionary<any>;
+  payload?: RequestInit['body'] | Dictionary<any>;
+}
+
+interface VetchResponse<T=any> extends Response {
+  data: T;
+}
+
 interface Options {
   fetch: any;
 }
 
-
+interface Dictionary<T> {
+  [propName: string]: T;
+}

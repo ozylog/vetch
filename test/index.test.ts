@@ -1,14 +1,16 @@
 import nock from 'nock';
 import fetch from 'node-fetch';
-import vetch, { setVetch, VetchResponse } from './../src/index';
+import vetch, { setVetch } from './../src/index';
 
 describe('#vetch()', () => {
 
   describe('when call vetch before setting fetch', () => {
     test(`should throw an error`, async () => {
+      setVetch({ fetch: null });
       let error;
 
       try {
+        // @ts-ignore
         await vetch('http://test.vetch.io/json');
       } catch (err) {
         error = err;
@@ -24,11 +26,12 @@ describe('#vetch()', () => {
     });
 
     describe('when response as json', () => {
-      let response: VetchResponse | undefined;
+      let response: any;
 
       beforeAll(async () => {
         nock('http://test.vetch.io').get('/json').reply(200, { hello: 'world' });
 
+        // @ts-ignore
         response = await vetch('http://test.vetch.io/json').json();
       });
 
@@ -50,11 +53,12 @@ describe('#vetch()', () => {
     });
 
     describe('when response as text', () => {
-      let response: VetchResponse | undefined;
+      let response: any;
 
       beforeAll(async () => {
         nock('http://test.vetch.io').get('/text').reply(200, 'hello world');
 
+        // @ts-ignore
         response = await vetch('http://test.vetch.io/text').text();
       });
 
@@ -76,11 +80,12 @@ describe('#vetch()', () => {
     });
 
     describe('when response as arrayBuffer', () => {
-      let response: VetchResponse | undefined;
+      let response: any;
 
       beforeAll(async () => {
         nock('http://test.vetch.io').get('/arrayBuffer').reply(200, new ArrayBuffer(8));
 
+        // @ts-ignore
         response = await vetch('http://test.vetch.io/arrayBuffer').arrayBuffer();
       });
 
@@ -103,12 +108,13 @@ describe('#vetch()', () => {
     });
 
     describe('when response as blob', () => {
-      let response: VetchResponse | undefined;
+      let response: any;
 
       beforeAll(async () => {
         const blob = new Blob([JSON.stringify({ hello: 'world' }, null, 2)], {type : 'application/json'});
         nock('http://test.vetch.io').get('/blob').reply(200, blob);
 
+        // @ts-ignore
         response = await vetch('http://test.vetch.io/blob').blob();
       });
 
@@ -130,7 +136,7 @@ describe('#vetch()', () => {
     });
 
     describe('when using query object', () => {
-      let response: VetchResponse | undefined;
+      let response: any;
 
       beforeAll(async () => {
         const object = { test: 123 };
@@ -144,6 +150,7 @@ describe('#vetch()', () => {
           .query({ hello: 'world', arr: [ 1, 2, 3] })
           .reply(200, { hello: 'world' });
 
+        // @ts-ignore
         response = await vetch('http://test.vetch.io/query', { query }).json();
       });
 
@@ -165,7 +172,7 @@ describe('#vetch()', () => {
     });
 
     describe('when using payload', () => {
-      let response: VetchResponse | undefined;
+      let response: any;
       const payload = { username: 'hello', password: 'world' };
 
       beforeAll(async () => {
@@ -173,6 +180,7 @@ describe('#vetch()', () => {
           .post('/payload', (body) => body.username && body.password)
           .reply(200, { hello: 'world' });
 
+        // @ts-ignore
         response = await vetch('http://test.vetch.io/payload', {
           method: 'POST',
           payload
@@ -202,6 +210,7 @@ describe('#vetch()', () => {
       beforeAll(async () => {
         nock('http://test.vetch.io').get('/json').reply(200, { hello: 'world' });
 
+        // @ts-ignore
         response = await vetch('http://test.vetch.io/json');
 
       });
@@ -257,11 +266,12 @@ describe('#vetch()', () => {
     });
 
     describe('when response status code = 400', () => {
-      let response: VetchResponse | undefined;
+      let response: any;
 
       beforeAll(async () => {
         nock('http://test.vetch.io').get('/json').reply(400, { message: 'Invalid data' });
 
+        // @ts-ignore
         response = await vetch('http://test.vetch.io/json').json();
       });
 
