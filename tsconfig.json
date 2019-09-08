@@ -10,7 +10,7 @@
     "noImplicitThis": false,
     "outDir": "dist",
     "strict": true,
-    "target": "eS6",
+    "target": "es6"
   },
   "include": [
     "src/**/*"
