@@ -119,7 +119,7 @@ interface Vetch<T> extends Promise<VetchResponse<undefined>> {
   blob(): Promise<VetchResponse<T>>;
   formData(): Promise<VetchResponse<T>>;
   json(): Promise<VetchResponse<T>>;
-  test(): Promise<VetchResponse<T>>;
+  text(): Promise<VetchResponse<T>>;
 }
 
 interface VetchOptions extends RequestInit {

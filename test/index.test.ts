@@ -9,7 +9,6 @@ describe('#vetch()', () => {
       let error;
 
       try {
-        // @ts-ignore
         await vetch('http://test.vetch.io/json');
       } catch (err) {
         error = err;
@@ -30,7 +29,6 @@ describe('#vetch()', () => {
       beforeAll(async () => {
         nock('http://test.vetch.io').get('/json').reply(200, { hello: 'world' });
 
-        // @ts-ignore
         response = await vetch('http://test.vetch.io/json').json();
       });
 
@@ -57,7 +55,6 @@ describe('#vetch()', () => {
       beforeAll(async () => {
         nock('http://test.vetch.io').get('/text').reply(200, 'hello world');
 
-        // @ts-ignore
         response = await vetch('http://test.vetch.io/text').text();
       });
 
@@ -113,7 +110,6 @@ describe('#vetch()', () => {
         const blob = new Blob([JSON.stringify({ hello: 'world' }, null, 2)], {type : 'application/json'});
         nock('http://test.vetch.io').get('/blob').reply(200, blob);
 
-        // @ts-ignore
         response = await vetch('http://test.vetch.io/blob').blob();
       });
 
@@ -149,7 +145,6 @@ describe('#vetch()', () => {
           .query({ hello: 'world', arr: [ 1, 2, 3] })
           .reply(200, { hello: 'world' });
 
-        // @ts-ignore
         response = await vetch('http://test.vetch.io/query', { query }).json();
       });
 
@@ -179,7 +174,6 @@ describe('#vetch()', () => {
           .post('/payload', (body) => body.username && body.password)
           .reply(200, { hello: 'world' });
 
-        // @ts-ignore
         response = await vetch('http://test.vetch.io/payload', {
           method: 'POST',
           payload
@@ -209,7 +203,6 @@ describe('#vetch()', () => {
       beforeAll(async () => {
         nock('http://test.vetch.io').get('/json').reply(200, { hello: 'world' });
 
-        // @ts-ignore
         response = await vetch('http://test.vetch.io/json');
 
       });
@@ -270,7 +263,6 @@ describe('#vetch()', () => {
       beforeAll(async () => {
         nock('http://test.vetch.io').get('/json').reply(400, { message: 'Invalid data' });
 
-        // @ts-ignore
         response = await vetch('http://test.vetch.io/json').json();
       });
 
