@@ -1,6 +1,6 @@
 import nock from 'nock';
 import fetch from 'node-fetch';
-import vetch, { setVetch, VetchResponse } from './../src/index';
+import vetch, { setVetch } from './../src/index';
 
 describe('#vetch()', () => {
 
@@ -24,7 +24,7 @@ describe('#vetch()', () => {
     });
 
     describe('when response as json', () => {
-      let response: VetchResponse | undefined;
+      let response: any;
 
       beforeAll(async () => {
         nock('http://test.vetch.io').get('/json').reply(200, { hello: 'world' });
@@ -50,7 +50,7 @@ describe('#vetch()', () => {
     });
 
     describe('when response as text', () => {
-      let response: VetchResponse | undefined;
+      let response: any;
 
       beforeAll(async () => {
         nock('http://test.vetch.io').get('/text').reply(200, 'hello world');
@@ -76,11 +76,12 @@ describe('#vetch()', () => {
     });
 
     describe('when response as arrayBuffer', () => {
-      let response: VetchResponse | undefined;
+      let response: any;
 
       beforeAll(async () => {
         nock('http://test.vetch.io').get('/arrayBuffer').reply(200, new ArrayBuffer(8));
 
+        // @ts-ignore
         response = await vetch('http://test.vetch.io/arrayBuffer').arrayBuffer();
       });
 
@@ -103,7 +104,7 @@ describe('#vetch()', () => {
     });
 
     describe('when response as blob', () => {
-      let response: VetchResponse | undefined;
+      let response: any;
 
       beforeAll(async () => {
         const blob = new Blob([JSON.stringify({ hello: 'world' }, null, 2)], {type : 'application/json'});
@@ -130,7 +131,7 @@ describe('#vetch()', () => {
     });
 
     describe('when using query object', () => {
-      let response: VetchResponse | undefined;
+      let response: any;
 
       beforeAll(async () => {
         const object = { test: 123 };
@@ -165,7 +166,7 @@ describe('#vetch()', () => {
     });
 
     describe('when using payload', () => {
-      let response: VetchResponse | undefined;
+      let response: any;
       const payload = { username: 'hello', password: 'world' };
 
       beforeAll(async () => {
@@ -257,7 +258,7 @@ describe('#vetch()', () => {
     });
 
     describe('when response status code = 400', () => {
-      let response: VetchResponse | undefined;
+      let response: any;
 
       beforeAll(async () => {
         nock('http://test.vetch.io').get('/json').reply(400, { message: 'Invalid data' });
