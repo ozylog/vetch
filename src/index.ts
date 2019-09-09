@@ -4,7 +4,7 @@ export function setVetch(options: Options) {
   if (options.fetch) fetch = options.fetch;
 }
 
-export default function vetch<T=any>(url: string, options?: VetchOptions): VetchResult<VetchResponse<T>, VetchResponse<undefined>> {
+export default function vetch<T=any>(url: string, options?: VetchOptions): Vetch<T> {
   if (!url) throw new Error('URL is required');
 
   let parser: EParser | null = null;
@@ -46,7 +46,7 @@ export default function vetch<T=any>(url: string, options?: VetchOptions): Vetch
   };
 
   const then = (resolve: any, reject: any) => {
-    return exec().then(resolve).catch(reject);
+    return exec().then(resolve, reject);
   };
 
   const arrayBuffer = () => {
@@ -114,12 +114,12 @@ const enum EParser {
   text = 'text'
 }
 
-interface VetchResult<T, K> extends Promise<K> {
-  arrayBuffer(): Promise<T>;
-  blob(): Promise<T>;
-  formData(): Promise<T>;
-  json(): Promise<T>;
-  test(): Promise<T>;
+interface Vetch<T> extends Promise<VetchResponse<undefined>> {
+  arrayBuffer(): Promise<VetchResponse<T>>;
+  blob(): Promise<VetchResponse<T>>;
+  formData(): Promise<VetchResponse<T>>;
+  json(): Promise<VetchResponse<T>>;
+  test(): Promise<VetchResponse<T>>;
 }
 
 interface VetchOptions extends RequestInit {

@@ -6,7 +6,6 @@ describe('#vetch()', () => {
 
   describe('when call vetch before setting fetch', () => {
     test(`should throw an error`, async () => {
-      setVetch({ fetch: null });
       let error;
 
       try {
