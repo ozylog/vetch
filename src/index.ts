@@ -1,50 +1,140 @@
-import Vetch, { EParser, VetchOptions } from './Vetch';
-export { VetchOptions, VetchResponse } from './Vetch';
+let fetch: any = window && window.fetch;
 
-export default function vetch(url: string, options?: VetchOptions) {
+export function setVetch(options: Options) {
+  if (options.fetch) fetch = options.fetch;
+}
+
+export default function vetch<T=any>(url: string, options?: VetchOptions): Vetch<T> {
   if (!url) throw new Error('URL is required');
 
-  const v = new Vetch(url, options);
+  let parser: EParser | null = null;
+  const exec = async (): Promise<VetchResponse<T>> => {
+    const { query, ...opts } = options || {};
 
-  this.then = (resolve: any, reject: any) => v.exec().then(resolve).catch(reject);
+    if (!fetch) throw new Error('fetch is not defined');
 
-  this.arrayBuffer = () => {
-    v.parser = EParser.arrayBuffer;
+    if (query) url += queryStringify(query);
+    if (opts.payload) {
+      if (typeof opts.payload === 'object') opts.body = JSON.stringify(opts.payload);
+      delete opts.payload;
+    }
 
-    return this;
+    const res = await fetch(url, opts);
+    let data;
+
+    switch (parser) {
+      case EParser.arrayBuffer:
+        data = await res.arrayBuffer();
+        break;
+      case EParser.blob:
+        data = await res.blob();
+        break;
+      case EParser.formData:
+        data = await res.formData();
+        break;
+      case EParser.json:
+        data = await res.json();
+        break;
+      case EParser.text:
+        data = await res.text();
+        break;
+    }
+
+    if (data !== undefined) res.data = data;
+
+    return res;
   };
 
-  this.blob = () => {
-    v.parser = EParser.blob;
-
-    return this;
+  const then = (resolve: any, reject: any) => {
+    return exec().then(resolve, reject);
   };
 
-  this.formData = () => {
-    v.parser = EParser.formData;
+  const arrayBuffer = () => {
+    parser = EParser.arrayBuffer;
 
-    return this;
+    return exec();
   };
 
-  this.json = () => {
-    v.parser = EParser.json;
+  const blob = () => {
+    parser = EParser.blob;
 
-    return this;
+    return exec();
   };
 
-  this.text = () => {
-    v.parser = EParser.text;
+  const formData = () => {
+    parser = EParser.formData;
 
-    return this;
+    return exec();
   };
 
-  return this;
+  const json = () => {
+    parser = EParser.json;
+
+    return exec();
+  };
+
+  const text = () => {
+    parser = EParser.text;
+
+    return exec();
+  };
+
+  // @ts-ignore
+  return { arrayBuffer, blob, formData, json, text, then };
+}
+
+function queryStringify(queryObject: Dictionary<any>): string {
+  let query = '';
+
+  for (let key in queryObject) {
+    if (!{}.hasOwnProperty.call(queryObject, key)) continue;
+
+    const value = queryObject[key];
+    key = encodeURI(key);
+
+    if (value instanceof Array) {
+      for (const item of value) {
+        query += `&${key}[]=${encodeURI(item)}`;
+      }
+    } else {
+      query += `&${key}=${encodeURI(value)}`;
+    }
+  }
+
+  if (query) query = `?${query.substr(1)}`;
+
+  return query;
+}
+
+const enum EParser {
+  arrayBuffer = 'arrayBuffer',
+  blob = 'blob',
+  formData = 'formData',
+  json = 'json',
+  text = 'text'
+}
+
+interface Vetch<T> extends Promise<VetchResponse<undefined>> {
+  arrayBuffer(): Promise<VetchResponse<T>>;
+  blob(): Promise<VetchResponse<T>>;
+  formData(): Promise<VetchResponse<T>>;
+  json(): Promise<VetchResponse<T>>;
+  text(): Promise<VetchResponse<T>>;
+}
+
+interface VetchOptions extends RequestInit {
+  query?: Dictionary<any>;
+  payload?: RequestInit['body'] | Dictionary<any>;
+}
+
+interface VetchResponse<T=any> extends Response {
+  data: T;
 }
 
 interface Options {
   fetch: any;
 }
 
-export function setVetch({ fetch }: Options) {
-  if (fetch) Vetch.fetch = fetch;
+interface Dictionary<T> {
+  [propName: string]: T;
 }
