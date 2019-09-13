@@ -1,5 +1,3 @@
-import { Response } from "node-fetch";
-
 let fetch: any = window && window.fetch;
 
 export function setVetch(options: Options) {

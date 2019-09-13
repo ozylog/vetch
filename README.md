@@ -64,24 +64,31 @@ Same as [Fetch response](https://github.github.io/fetch/#Response) with addition
 
 ## Usage Examples
 ```
-const { data, headers } = await vetch('/users').json();
+interface ResData {
+  name: string;
+}
+
+const { data, headers } = await vetch<ResData[]>('/users').json();
 // note: data is json parsed response body
+// data has type ResData[]
 
 // support object for request.query
-const { data, headers } = await vetch('/users', {
+const { data, headers } = await vetch<ResData[]>('/users', {
   query: {
     ids: [ 1, 2 ],
     city: 'auckland'
   }
 }).json();
 // note: for url /users?ids[]=1&ids[]=2&city=auckland
+// data has type ResData[]
 
 // support object for request.body
-const { data, headers } = await vetch('/users', {
+const { data, headers } = await vetch<ResData>('/users', {
   method: 'POST',
   payload: { name: 'John'}
 }).json();
 // fetch.option.body: JSON.stringify({ name: 'John' }) equivalent
+// data has type ResData
 
 // If you don't need to parse response body
 const response = await vetch('/users');
