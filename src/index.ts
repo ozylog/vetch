@@ -1,14 +1,16 @@
+import { Response } from "node-fetch";
+
 let fetch: any = window && window.fetch;
 
 export function setVetch(options: Options) {
   if (options.fetch) fetch = options.fetch;
 }
 
-export default function vetch<T=any>(url: string, options?: VetchOptions): Vetch<T> {
+export default function vetch<T = any, E = any>(url: string, options?: VetchOptions): Vetch<T, E> {
   if (!url) throw new Error('URL is required');
 
   let parser: EParser | null = null;
-  const exec = async (): Promise<VetchResponse<T>> => {
+  const exec = async (): Promise<VetchResponse<T, E>> => {
     const { query, ...opts } = options || {};
 
     if (!fetch) throw new Error('fetch is not defined');
@@ -114,12 +116,12 @@ const enum EParser {
   text = 'text'
 }
 
-interface Vetch<T> extends Promise<VetchResponse<undefined>> {
-  arrayBuffer(): Promise<VetchResponse<T>>;
-  blob(): Promise<VetchResponse<T>>;
-  formData(): Promise<VetchResponse<T>>;
-  json(): Promise<VetchResponse<T>>;
-  text(): Promise<VetchResponse<T>>;
+interface Vetch<T, E> extends Promise<VetchResponse<undefined, undefined>> {
+  arrayBuffer(): Promise<VetchResponse<T, E>>;
+  blob(): Promise<VetchResponse<T, E>>;
+  formData(): Promise<VetchResponse<T, E>>;
+  json(): Promise<VetchResponse<T, E>>;
+  text(): Promise<VetchResponse<T, E>>;
 }
 
 interface VetchOptions extends RequestInit {
@@ -127,9 +129,15 @@ interface VetchOptions extends RequestInit {
   payload?: RequestInit['body'] | Dictionary<any>;
 }
 
-interface VetchResponse<T=any> extends Response {
+type VetchResponse<T, E> = Response &
+({
+  ok: true;
   data: T;
-}
+} |
+{
+  ok: false;
+  data: E;
+});
 
 interface Options {
   fetch: any;
