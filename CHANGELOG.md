@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+## [2.1.3] - 2019-09-14
+### Changed
+- handle window.fetch error
+
 ## [2.1.2] - 2019-09-14
 ### Changed
 - Update README.md
@@ -38,7 +42,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Isomorphic-fetch package
-
 
 ## [1.0.0] - 2019-07-02
 ### Added

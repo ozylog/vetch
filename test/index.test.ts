@@ -94,7 +94,6 @@ describe('#vetch()', () => {
       });
 
       test(`should return response.data as arrayBuffer`, () => {
-        console.log(response!.data);
         expect(response!.data).toBeInstanceOf(ArrayBuffer);
       });
 
@@ -141,8 +140,7 @@ describe('#vetch()', () => {
         query.arr = [ 1, 2, 3 ];
 
         nock('http://test.vetch.io')
-          .get('/query')
-          .query({ hello: 'world', arr: [ 1, 2, 3] })
+          .get('/query?hello=world&arr[]=1&arr[]=2&arr[]=3')
           .reply(200, { hello: 'world' });
 
         response = await vetch('http://test.vetch.io/query', { query }).json();

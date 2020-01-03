@@ -1,4 +1,6 @@
-let fetch: any = window && window.fetch;
+let fetch: any;
+
+if (typeof window !== 'undefined' && typeof window.fetch !== 'undefined') fetch = window.fetch;
 
 export function setVetch(options: Options) {
   if (options.fetch) fetch = options.fetch;
