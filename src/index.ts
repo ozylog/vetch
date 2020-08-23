@@ -85,7 +85,7 @@ export default function vetch<T = any, E = any>(url: string, options?: VetchOpti
   return { arrayBuffer, blob, formData, json, text, then };
 }
 
-function queryStringify(queryObject: Dictionary<any>): string {
+function queryStringify(queryObject: Record<string, any>): string {
   let query = '';
 
   for (let key in queryObject) {
@@ -116,7 +116,7 @@ const enum EParser {
   text = 'text'
 }
 
-interface Vetch<T, E> extends Promise<VetchResponse<undefined, undefined>> {
+export interface Vetch<T, E> extends Promise<VetchResponse<undefined, undefined>> {
   arrayBuffer(): Promise<VetchResponse<T, E>>;
   blob(): Promise<VetchResponse<T, E>>;
   formData(): Promise<VetchResponse<T, E>>;
@@ -124,12 +124,12 @@ interface Vetch<T, E> extends Promise<VetchResponse<undefined, undefined>> {
   text(): Promise<VetchResponse<T, E>>;
 }
 
-interface VetchOptions extends RequestInit {
-  query?: Dictionary<any>;
-  payload?: RequestInit['body'] | Dictionary<any>;
+export interface VetchOptions extends RequestInit {
+  query?: Record<string, any>;
+  payload?: RequestInit['body'] | Record<string, any>;
 }
 
-type VetchResponse<T, E> = Response &
+export type VetchResponse<T, E> = Response &
 ({
   ok: true;
   data: T;
@@ -141,8 +141,4 @@ type VetchResponse<T, E> = Response &
 
 interface Options {
   fetch: any;
-}
-
-interface Dictionary<T> {
-  [propName: string]: T;
 }
