@@ -2,7 +2,7 @@ let fetch: any;
 
 if (typeof window !== 'undefined' && typeof window.fetch !== 'undefined') fetch = window.fetch;
 
-export function setVetch(options: Options) {
+export function setVetch(options: Options): void {
   if (options.fetch) fetch = options.fetch;
 }
 
@@ -17,7 +17,25 @@ export default function vetch<T = any, E = any>(url: string, options?: VetchOpti
 
     if (query) url += queryStringify(query);
     if (opts.payload) {
-      if (typeof opts.payload === 'object') opts.body = JSON.stringify(opts.payload);
+      if (typeof opts.payload === 'object') {
+        opts.body = JSON.stringify(opts.payload);
+
+        if (!opts.headers) opts.headers = new Headers();
+        if (opts.headers instanceof Headers) {
+          if (!opts.headers.has('Content-Type') && !opts.headers.has('content-type')) {
+            opts.headers.set('Content-Type', 'application/json');
+          }
+        } else if (Array.isArray(opts.headers)) {
+          const hasContentType = opts.headers.some(([ field ]) => field.toLowerCase() === 'content-type' );
+          if (!hasContentType) opts.headers.push([ 'Content-Type', 'application/json' ]);
+        } else {
+          if (!opts.headers['Content-Type'] && !opts.headers['content-type']) {
+            opts.headers['Content-Type'] = 'application/json';
+          }
+        }
+      } else {
+        opts.body = opts.payload;
+      }
       delete opts.payload;
     }
 
