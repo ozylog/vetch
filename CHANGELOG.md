@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+## [2.3.1] - 2021-09-29
+### Changed
+- update node version
+
 ## [2.1.3] - 2019-09-14
 ### Changed
 - handle window.fetch error
